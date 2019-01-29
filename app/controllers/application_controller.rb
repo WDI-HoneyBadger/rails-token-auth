@@ -1,5 +1,14 @@
 class ApplicationController < ActionController::API
   
+  def require_token
+    token = params.require(:auth_token)
+    @current_user = User.find_by( auth_token: token )
+
+    unless @current_user 
+      render json: { errors: "invalid token" }, status: :unauthorized
+    end
+  end
+
   rescue_from(ActionController::ParameterMissing) do |parameter_missing_exception|
     render json: { errors: parameter_missing_exception }, status: :unprocessable_entity
   end

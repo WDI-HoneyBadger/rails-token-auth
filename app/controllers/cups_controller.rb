@@ -1,8 +1,7 @@
 class CupsController < ApplicationController
-
+  before_action :require_token
   def index 
-    @cups = Cup.all 
+    @cups = @current_user.cups
     render json: @cups
   end 
-
 end
